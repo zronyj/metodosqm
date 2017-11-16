@@ -28,10 +28,10 @@ phi = Phi(x = 0, y = 0, z = 1, l=1, m=-1)
 e_hidrogeno = E_h(n = 1, Z = 1)
 
 # Grafica de la funcion de onda a lo largo del radio atomico
-orbital_r(n = 1, l = 0, Z = 1, d = [-0.5, 5, 0.1])
+orbital_r(n = 2, l = 1, Z = 1, d = [-0.5, 5, 0.1])
 
 # Grafica de los orbitales del atomo de hidrogeno
-orbital2D(n = 1, l = 0, m = 0, Z = 1, d = [-4, 4, 40])
+orbital2D(n = 2, l = 1, m = -1)
 ```
 
 ## Molécula de Hidrógeno [H<sub>2</sub>] (utilizando el método de Hartree-Fock)

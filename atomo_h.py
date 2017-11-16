@@ -10,6 +10,18 @@ Descripcion
 Pequeno script para realizar el calculo de la energia y forma de los orbitales
 del atomo de hidrogeno partiendo de sus funciones.
 
+Referencias
+-----------
+(1) Haber, H. (2012). The Spherical Harmonics. Recuperado
+    noviembre 16, 2017, de
+    http://scipp.ucsc.edu/~haber/ph116C/SphericalHarmonics_12.pdf
+
+(2) Levine, I. N. (2001). Química Cuántica (5ta ed.). Madrid: Prentice Hall.
+
+(3) The SciPy Community. (2017, June 21). Scipy.special.sph_harm. Recuperado
+    noviembre 16, 2017, de https://docs.scipy.org/doc/scipy-0.19.1/reference/
+    generated/scipy.special.sph_harm.html
+
 """
 
 import numpy as np
@@ -26,9 +38,10 @@ phi = lambda x, y, z: np.arctan((x**2 + y**2)**0.5 / z)
 # Funcion para calcular factorial n!
 factorial = lambda n: np.prod( np.array( [i for i in range(1,n)] ) )
 
-# *******************************
+# *********************************
 # Funcion de coordenadas radiales
-# *******************************
+# Referencia (2) p. 141 eq. (6.100)
+# *********************************
 def Rho(n, l, r, Z=1):
     rho = 2 * Z * r / n
     el = rho**l
@@ -38,6 +51,7 @@ def Rho(n, l, r, Z=1):
 
 # *********************************
 # Funcion de coordenadas azimutales
+# Referencia (3)
 # *********************************
 def Theta(x, y, m):
     t = theta(x, y)
@@ -45,6 +59,7 @@ def Theta(x, y, m):
 
 # ******************************
 # Funcion de coordenadas polares
+# Referencia (3)
 # ******************************
 def Phi(x, y, z, l, m):
     N_lm = ( (2*l+1)/2 * factorial(l - m)/factorial(l + m))**0.5
@@ -52,9 +67,11 @@ def Phi(x, y, z, l, m):
     P_lm = spe.lpmv(m, l, np.cos(p)) # Polinomio asociado de Legendre
     return N_lm * P_lm
 
-# *******************
+# ***************************
 # Armonicos Esfericos
-# *******************
+# Referencia (1) p. 3 eq. (9)
+# Referencia (3)
+# ***************************
 def Y_ae(x, y, z, l, m):
     ytp = Theta(x, y, m) * Phi(x, y, z, l, m)
     #ytp = spe.sph_harm(m, l, phi(x, y, z), theta(x, y))
@@ -62,6 +79,7 @@ def Y_ae(x, y, z, l, m):
 
 # **************************************
 # Funcion de onda del atomo de hidrogeno
+# Referencia (2) p. 136 eq. (6.61)
 # **************************************
 def Psi2(x, y, z, n, l, m, Z=1):
     r = rho(x, y, z)
@@ -69,6 +87,7 @@ def Psi2(x, y, z, n, l, m, Z=1):
 
 # *************************************
 # Energia del atomo de hidrogeno para n
+# Referencia (2) p. 140 eq. (6.94)
 # *************************************
 def E_h(n, Z=1):
     a = -Z**2 * cnts.m_e**4 * np.exp(4)
