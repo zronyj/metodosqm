@@ -5,6 +5,12 @@ Created on Wed Nov  1 14:31:00 2017
 @author: Rony J. Letona
 @email: zronyj@gmail.com
 
+Descripcion
+-----------
+Pequeno script para realizar el calculo de la energia y forma de los orbitales
+de la molecula de hidrogeno H2 o HeH+ mediante el metodo de Hartree-Fock con
+3 sets de bases diferentes: STO-2G, STO-3G y STO-6G.
+
 Referencias
 -----------
 
