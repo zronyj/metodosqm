@@ -80,7 +80,7 @@ def E_h(n, Z=1):
 # Funcion para graficar el orbital radial
 # en 2 dimensiones
 # ***************************************
-def orbital_r(n, l, Z=1, d=[-0.5,5,0.1]):
+def orbital_r(n, l, Z=1, d=[-1,5,0.1]):
     x = np.arange(d[0], d[1], d[2])
     vr = np.vectorize(Rho)
     y = vr(n, l, x, Z)
@@ -89,6 +89,9 @@ def orbital_r(n, l, Z=1, d=[-0.5,5,0.1]):
     plt.plot(x, y, "r--", label="$\Psi$")
     plt.plot(x, y2, "b-", label="$\Psi^2$")
     plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    axes = plt.gca()
+    axes.set_ylim([-0.2, 1])
+    axes.set_xlim([-0.5, d[1] - 0.5])
     plt.grid(True)
     plt.show()
 
@@ -103,23 +106,26 @@ def orbital2D(n=1, l=0, m=0, Z=1, d=[-4,4,40]):
     Xi, Yi, Zi = np.meshgrid(x, y, z)
     vf = np.vectorize(Psi2)
     orb = vf(x=Xi, y=Yi, z=Zi, n=n, l=l, m=m, Z=Z)
-    plano_xy = orb[:,:,int(d[2]/2)]
-    plano_xz = orb[:,int(d[2]/2),:]
-    plano_yz = orb[int(d[2]/2),:,:]
+    plano_xz = orb[:,:,int(d[2]/2)]
+    plano_yz = orb[:,int(d[2]/2),:]
+    plano_xy = orb[int(d[2]/2),:,:]
     fig = plt.figure()
     
-    ax = fig.add_subplot(131)
-    ax.title.set_text("Eje X")
+    ax = fig.add_subplot(221)
+    ax.title.set_text("Eje X - plano yz")
     plt.contourf(y, z, plano_yz, 20, cmap=cm.bone)
     plt.colorbar()
     
-    ay = fig.add_subplot(132)
-    ay.title.set_text("Eje Y")
+    ay = fig.add_subplot(222)
+    ay.title.set_text("Eje Y - plano xz")
     plt.contourf(x, z, plano_xz, 20, cmap=cm.bone)
     plt.colorbar()
     
-    az = fig.add_subplot(133)
-    az.title.set_text("Eje Z")
+    az = fig.add_subplot(223)
+    az.title.set_text("Eje Z - plano xy")
     plt.contourf(x, y, plano_xy, 20, cmap=cm.bone)
     plt.colorbar()
+    
+    fig.tight_layout()
+    fig.set_size_inches(w=5.4,h=4.4)
     
