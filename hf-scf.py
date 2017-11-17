@@ -100,7 +100,7 @@ def Psi (r, R, base = GTO["H"], b = 3):
     wf = 0
     for i in range(b):
         a = base["a"][b][i]
-        wf += base["c"][b][i] * (2 * a / pi)**0.75 * exp(-a * (r - R)**2)
+        wf += base["c"][b][i] * (2 * a / np.pi)**0.75 * np.exp(-a * (r - R)**2)
     return wf
 
 # ***********************************
@@ -126,7 +126,7 @@ def orbital (c, r = 1.4632, b1 = GTO["H"], b2 = GTO["H"], b = 3):
     plt.grid(True)
     plt.show()
 
-def orbital2D (c, r = 1.4632, b1 = GTO["H"], b2 = GTO["H"], b = 3, delta=0.1):
+def orbital2D (c, r = 1.4632, b1 = GTO["H"], b2 = GTO["H"], b = 3, delta=0.02):
     domx = np.arange(-3.5,r+3.5+delta,delta)
     domy = np.arange(-1.5-r/2,1.5+r/2+delta,delta)
     densmap1 = [[0]*len(domx)]*len(domy)
@@ -144,10 +144,10 @@ def orbital2D (c, r = 1.4632, b1 = GTO["H"], b2 = GTO["H"], b = 3, delta=0.1):
     dm1 = np.array(densmap1, dtype=np.float32)
     dm2 = np.array(densmap2, dtype=np.float32)
     plt.subplot(211)
-    plt.imshow(dm1,cmap=cm.hot)
+    plt.imshow(dm1,cmap=cm.bone)
     plt.colorbar()
     plt.subplot(212)
-    plt.imshow(dm2,cmap=cm.hot)
+    plt.imshow(dm2,cmap=cm.bone)
     plt.colorbar()
     plt.show()
 
@@ -157,7 +157,7 @@ def orbital2D (c, r = 1.4632, b1 = GTO["H"], b2 = GTO["H"], b = 3, delta=0.1):
 # **********************************
 def diagon(m=np.matrix([[1,-0.5],[-2,1.5]])):
     m_eigenval, m_eigenvec = np.linalg.eig(m)
-    mvp = np.matrix(np.diag([1/sqrt(i) for i in m_eigenval.tolist()]),
+    mvp = np.matrix(np.diag([1/i**0.5 for i in m_eigenval.tolist()]),
                     dtype=np.float64)
     return (m_eigenvec * mvp)[::-1]
 
@@ -167,13 +167,13 @@ def diagon(m=np.matrix([[1,-0.5],[-2,1.5]])):
 # **************************************
 def diagon2(m=np.matrix([[1,-0.5],[-2,1.5]])):
     if abs(m[0,0] - m[1,1]) < 1E-8:
-        temp = pi/4
+        temp = np.pi/4
     elif (abs(m[0,1]) < 1E-8) or (abs(m[1,0]) < 1E-8):
-        temp = pi/4
+        temp = np.pi/4
     else:
-        temp = 0.5 * atan( 2*m[0,1] / (m[0,0] - m[1,1]) )
-    ed = N(cos(temp))
-    ec = N(sin(temp))
+        temp = 0.5 * np.arctan( 2*m[0,1] / (m[0,0] - m[1,1]) )
+    ed = np.cos(temp)
+    ec = np.sin(temp)
     return np.matrix( [[ed,ec],[ec,-ed]] )
     
 # *******************************
@@ -185,11 +185,11 @@ def s (b1 = GTO["H"], b2 = GTO["H"], r = 0, b = 3):
     suv = 0
     for i in range(b-1,-1,-1):
         for j in range(b-1,-1,-1):
-            du = (2*b1["a"][b][i]/pi)**0.75 * b1["c"][b][i]
-            dv = (2*b2["a"][b][j]/pi)**0.75 * b2["c"][b][j]
+            du = (2*b1["a"][b][i]/np.pi)**0.75 * b1["c"][b][i]
+            dv = (2*b2["a"][b][j]/np.pi)**0.75 * b2["c"][b][j]
             Sa = b1["a"][b][i] + b2["a"][b][j]
-            suv += du * dv * (pi/Sa)**1.5 * \
-            exp( -((b1["a"][b][i] * b2["a"][b][j])/Sa) * r**2 )
+            suv += du * dv * (np.pi/Sa)**1.5 * \
+            np.exp( -((b1["a"][b][i] * b2["a"][b][j])/Sa) * r**2 )
     return suv
 
 def S(R = [0,1.4632], b1 = GTO["H"], b2 = GTO["H"], b = 3):
@@ -208,12 +208,12 @@ def t(b1 = GTO["H"], b2 = GTO["H"], r = 0, b = 3):
     tuv = 0
     for i in range(b-1,-1,-1):
         for j in range(b-1,-1,-1):
-            du = (2*b1["a"][b][i]/pi)**0.75 * b1["c"][b][i]
-            dv = (2*b2["a"][b][j]/pi)**0.75 * b2["c"][b][j]
+            du = (2*b1["a"][b][i]/np.pi)**0.75 * b1["c"][b][i]
+            dv = (2*b2["a"][b][j]/np.pi)**0.75 * b2["c"][b][j]
             Sa = b1["a"][b][i] + b2["a"][b][j]
             Ma = b1["a"][b][i] * b2["a"][b][j]
-            tuv += du * dv * (Ma/Sa) * (3 - 2*Ma/Sa * r**2) * (pi/Sa)**1.5 * \
-            exp( -((Ma/Sa) * r**2 ))
+            tuv += du * dv * (Ma/Sa) * (3 - 2*Ma/Sa * r**2) * \
+            (np.pi/Sa)**1.5 * np.exp( -((Ma/Sa) * r**2 ))
     return tuv
 
 def T(R=[0,1.4632], b1 = GTO["H"], b2 = GTO["H"], b = 3):
@@ -234,8 +234,8 @@ def v (b1 = GTO["H"], b2 = GTO["H"], r=1.4632, Rp=[0,0,1,1], Z=[1,1], b = 3):
         R = [l*r for l in Rp[2*k:2*k+2]]
         for i in range(b-1,-1,-1):
             for j in range(b-1,-1,-1):
-                du = (2*b1["a"][b][i]/pi)**0.75 * b1["c"][b][i]
-                dv = (2*b2["a"][b][j]/pi)**0.75 * b2["c"][b][j]
+                du = (2*b1["a"][b][i]/np.pi)**0.75 * b1["c"][b][i]
+                dv = (2*b2["a"][b][j]/np.pi)**0.75 * b2["c"][b][j]
                 Sa = b1["a"][b][i] + b2["a"][b][j]
                 Rr = (b1["a"][b][i] * R[0] + b2["a"][b][j] * R[1]) / Sa
                 Ruv = abs(R[1]-R[0])
@@ -244,9 +244,9 @@ def v (b1 = GTO["H"], b2 = GTO["H"], r=1.4632, Rp=[0,0,1,1], Z=[1,1], b = 3):
                 if t < 1E-5:
                     F = 1 - t
                 else:
-                    F = 0.5*(pi/t)**0.5 * erf(t**0.5)
-                temp = (-2*du*dv*pi*Z[k]/Sa) * F * \
-                exp( -((b1["a"][b][i] * b2["a"][b][j])/Sa * Ruv**2 ))
+                    F = 0.5*(np.pi/t)**0.5 * erf(t**0.5)
+                temp = (-2*du*dv*np.pi*Z[k]/Sa) * F * \
+                np.exp( -((b1["a"][b][i] * b2["a"][b][j])/Sa * Ruv**2 ))
                 vuv += N(temp)
     return vuv
 
@@ -286,9 +286,9 @@ def ide (o = [0,0,0,0], R=[0,1], b1 = GTO["H"], b2 = GTO["H"], b = 3):
                     m1 = base[o[0]]["a"][b][i] * base[o[1]]["a"][b][j]
                     m2 = base[o[2]]["a"][b][k] * base[o[3]]["a"][b][l]
                     index = [i,j,k,l]
-                    d = [(2*base[o[m]]["a"][b][index[m]]/pi)**0.75 * \
+                    d = [(2*base[o[m]]["a"][b][index[m]]/np.pi)**0.75 * \
                          base[o[m]]["c"][b][index[m]] for m in range(4)]
-                    contrac = prod(d)
+                    contrac = np.prod(d)
                     R1 = R[o[1]] - R[o[0]]
                     R2 = R[o[3]] - R[o[2]]
                     Rr = (base[o[0]]["a"][b][i] * R[o[0]] + \
@@ -296,13 +296,13 @@ def ide (o = [0,0,0,0], R=[0,1], b1 = GTO["H"], b2 = GTO["H"], b = 3):
                     Rs = (base[o[2]]["a"][b][k] * R[o[2]] + \
                           base[o[3]]["a"][b][l] * R[o[3]]) / s2
                     Rsr = (Rs - Rr)**2
-                    piterm = 2*pi**2.5 / (s1*s2*s3**0.5)
-                    expterm = exp(-m1/s1 * R1**2 - m2/s2 * R2**2)
+                    piterm = 2*np.pi**2.5 / (s1*s2*s3**0.5)
+                    expterm = np.exp(-m1/s1 * R1**2 - m2/s2 * R2**2)
                     t = s1 * s2 / s3 * Rsr
                     if t < 1E-5:
                         F = 1 - t
                     else:
-                        F = 0.5 * (pi/t)**0.5 * erf(t**0.5)
+                        F = 0.5 * (np.pi/t)**0.5 * erf(t**0.5)
                     res += contrac * piterm * expterm * F
     return N(res)
 
