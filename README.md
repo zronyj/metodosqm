@@ -12,6 +12,19 @@ Cabe resaltar que lo que se halla en cada archivo solo son las funciones para re
 ## Partícula en una caja
 
 ## Oscilador Armónico
+```python
+# Funcion para el calculo de la onda con nodos n, frecuencia f y la masa del electron
+oa = psi(x = 0, n = 1, f = 0.015, m = cnts.m_e)
+
+# Calculo de la energia del oscilador armonico
+e_oa = energia(n = 1, f = 0.015)
+
+# Grafica de la funcion de onda a lo largo del radio atomico
+orbital(n = 2, f = 0.015, m = cnts.m_e)
+
+# Grafica de los orbitales del atomo de hidrogeno
+orbital2D(n_max = 6, f = 0.015, m = cnts.m_e)
+```
 
 ## Átomo de Hidrógeno [H]
 ```python
