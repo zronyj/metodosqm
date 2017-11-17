@@ -126,7 +126,7 @@ def orbital (c, r = 1.4632, b1 = GTO["H"], b2 = GTO["H"], b = 3):
     plt.grid(True)
     plt.show()
 
-def orbital2D (c, r = 1.4632, b1 = GTO["H"], b2 = GTO["H"], b = 3, delta=0.02):
+def orbital2D (C, X, F, r = 1.4632, b1 = GTO["H"], b2 = GTO["H"], b = 3, delta=0.02):
     domx = np.arange(-3.5,r+3.5+delta,delta)
     domy = np.arange(-1.5-r/2,1.5+r/2+delta,delta)
     densmap1 = [[0]*len(domx)]*len(domy)
@@ -137,18 +137,22 @@ def orbital2D (c, r = 1.4632, b1 = GTO["H"], b2 = GTO["H"], b = 3, delta=0.02):
         for x in range(len(domx)):
             p1 = Psi(domx[x], 0, base=b1, b=b)
             p2 = Psi(domx[x], r, base=b2, b=b)
-            densmap1[y][x] = (c[0,0]*p1*q1 + c[1,0]*p2*q2)**2
-            densmap2[y][x] = (c[0,1]*p1*q1 + c[1,1]*p2*q2)**2
+            densmap1[y][x] = (C[0,0]*p1*q1 + C[1,0]*p2*q2)**2
+            densmap2[y][x] = (C[0,1]*p1*q1 + C[1,1]*p2*q2)**2
         densmap1[y] = tuple(densmap1[y])
         densmap2[y] = tuple(densmap2[y])
     dm1 = np.array(densmap1, dtype=np.float32)
     dm2 = np.array(densmap2, dtype=np.float32)
-    plt.subplot(211)
-    plt.imshow(dm1,cmap=cm.bone)
-    plt.colorbar()
-    plt.subplot(212)
-    plt.imshow(dm2,cmap=cm.bone)
-    plt.colorbar()
+    energias = ener_orbs(X, F)
+    fig = plt.figure()
+    e1 = energias[0]
+    a1 = fig.add_subplot(221)
+    a1.title.set_text("Orbital 1\nE = " + str(e1))
+    a1.imshow(dm1,cmap=cm.hot)
+    e2 = energias[1]
+    a2 = fig.add_subplot(224)
+    a2.title.set_text("Orbital 2\nE = " + str(e2))
+    a2.imshow(dm2,cmap=cm.hot)
     plt.show()
 
 # **********************************
