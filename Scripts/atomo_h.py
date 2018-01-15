@@ -90,7 +90,7 @@ def Psi2(x, y, z, n, l, m, Z=1):
 # Referencia (2) p. 140 eq. (6.94)
 # *************************************
 def E_h(n, Z=1):
-    a = -Z**2 * cnts.m_e**4 * np.exp(4)
+    a = -(Z**2) * cnts.m_e * cnts.elementary_charge**4
     d = ( 8 * cnts.h**2 * cnts.epsilon_0**2 * n**2)
     return a / d
                                     
